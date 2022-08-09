@@ -1,6 +1,16 @@
+using BookStore.DAL.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
 builder.Services.AddControllersWithViews();
+
+var configuration = builder.Configuration;
+
+services.AddDbContext<BookStoreDB>(
+    opt => opt.UseSqlServer(
+        configuration.GetConnectionString("SqlServer")));
 
 var app = builder.Build();
 
