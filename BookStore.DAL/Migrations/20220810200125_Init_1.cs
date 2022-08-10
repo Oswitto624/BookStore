@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace BookStore.DAL.Migrations
 {
-    public partial class Init : Migration
+    public partial class Init_1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,7 +28,7 @@ namespace BookStore.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
-                    PublicationDate = table.Column<DateTime>(type: "Date", nullable: false),
+                    PublicationDate = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
