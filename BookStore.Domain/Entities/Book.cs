@@ -9,10 +9,13 @@ public class Book : NamedEntity
     [Required]
     public Author Author { get; set; } = null!;
 
-    [Required]
-    [DataType(DataType.Date)]
-    [Column(TypeName = "Date")]
-    public DateTime PublicationDate { get; set; }
+    //[Required]
+    //[DataType(DataType.Date)]
+    //[Column(TypeName = "Date")]
+    //public DateTime PublicationDate { get; set; }
 
-    public override string ToString() => $"[{Id}] {Name}, {Author.Name}, {PublicationDate.ToShortDateString()} ";
+    [Required]
+    public int PublicationDate { get; set; }
+
+    public override string ToString() => $"[{Id}] {Name}, {Author.Name}, {PublicationDate} ";
 }
