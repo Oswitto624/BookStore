@@ -16,6 +16,8 @@ services.AddDbContext<BookStoreDB>(
 
 services.AddTransient<IDbInitializer, DbInitializer>();
 
+services.AddScoped<IBooksService, SqlBooksService>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
