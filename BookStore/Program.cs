@@ -1,4 +1,6 @@
 using BookStore.DAL.Context;
+using BookStore.Services;
+using BookStore.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,15 @@ services.AddDbContext<BookStoreDB>(
     opt => opt.UseSqlServer(
         configuration.GetConnectionString("SqlServer")));
 
+services.AddTransient<IDbInitializer, DbInitializer>();
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db_initializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+    await db_initializer.InitializeAsync(RemoveBefore: true);
+}
 
 if (!app.Environment.IsDevelopment())
 {
