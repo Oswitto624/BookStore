@@ -45,5 +45,28 @@ namespace BookStore.Controllers
 
             return View(books);
         }
+
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id < 0)
+                return BadRequest();
+
+            var book = await _BooksData.GetByIdAsync(id);
+            if (book is null)
+                return NotFound();
+
+            return View(book);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(int Id)
+        {
+            if (!await _BooksData.DeleteAsync(Id))
+                return NotFound();
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
