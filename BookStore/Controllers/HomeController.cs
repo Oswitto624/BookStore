@@ -1,4 +1,6 @@
-﻿using BookStore.Models;
+﻿using BookStore.Domain;
+using BookStore.Models;
+using BookStore.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,27 +8,42 @@ namespace BookStore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IBooksService _BooksData;
+        private readonly ILogger<HomeController> _Logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IBooksService BooksData, ILogger<HomeController> Logger)
         {
-            _logger = logger;
+            _BooksData = BooksData;
+            _Logger = Logger;
         }
-
-        public IActionResult Index()
+        
+        public async Task<IActionResult> Index(SortState sortOrder = SortState.IdAsc)
         {
-            return View();
-        }
+            var books = await _BooksData.GetAllAsync();
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            #region Sort
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewData["IdSort"] = sortOrder == SortState.IdAsc ? SortState.IdDesc : SortState.IdAsc;
+            ViewData["BookNameSort"] = sortOrder == SortState.BookNameAsc ? SortState.BookNameDesc : SortState.BookNameAsc;
+            ViewData["AutorSort"] = sortOrder == SortState.AuthorAsc ? SortState.AuthorDesc : SortState.AuthorAsc;
+            ViewData["PublicationDateSort"] = sortOrder == SortState.PublicationDateAsc ? SortState.PublicationDateDesc : SortState.PublicationDateAsc;
+
+            books = sortOrder switch
+            {
+                SortState.IdAsc => books.OrderBy(s => s.Id),
+                SortState.BookNameAsc => books.OrderBy(s => s.Name),
+                SortState.AuthorAsc => books.OrderBy(s => s.Author.Name),
+                SortState.PublicationDateAsc => books.OrderBy(s => s.PublicationDate),
+                SortState.IdDesc => books.OrderByDescending(s => s.Id),
+                SortState.BookNameDesc => books.OrderByDescending(s => s.Name),
+                SortState.AuthorDesc => books.OrderByDescending(s => s.Author.Name),
+                SortState.PublicationDateDesc => books.OrderByDescending(s => s.PublicationDate),
+                _ => books.OrderBy(s => s.Id),
+            };
+
+            #endregion
+
+            return View(books);
         }
     }
 }
