@@ -68,5 +68,31 @@ namespace BookStore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> AddToCart(int Id)
+        {
+            var book = await _BooksData.GetByIdAsync(Id);
+
+            if (book is null)
+                return NotFound();
+
+            book.AddedToCart = true;
+
+            await _BooksData.UpdateAsync(book);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> RefreshCart()
+        {
+            var books = await _BooksData.GetAllAsync();
+
+            foreach (var book in books)
+            {
+                book.AddedToCart = false;
+                await _BooksData.UpdateAsync(book);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

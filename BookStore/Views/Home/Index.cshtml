@@ -38,26 +38,29 @@
             <tbody>
                 @foreach(var book in Model)
                 {
-                    <tr>
-                        <td>@book.Id</td>
-                        <td>@book.Name</td>
-                        <td>@book.Author.Name</td>
-                        <td>@book.PublicationDate</td>
-                        <td>
-                             <a asp-action="AddToCart" asp-route-id="@book.Id" class="btn btn-success">
-                                 <i class="fa-regular fa-plus"></i><br>Add to cart
-                             </a>
-                             <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger " aria-label="Delete">
-                                 <i class="fa-regular fa-trash-can"></i>
-                             </a>
-                         </td>
-                    </tr>
+                    if (!book.AddedToCart)
+                    {                     
+                        <tr>
+                            <td>@book.Id</td>
+                            <td>@book.Name</td>
+                            <td>@book.Author.Name</td>
+                            <td>@book.PublicationDate</td>
+                            <td>
+                                 <a asp-action="AddToCart" asp-route-id="@book.Id" class="btn btn-success">
+                                     <i class="fa-regular fa-plus"></i><br>Купить
+                                 </a>
+                                 <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger " aria-label="Delete">
+                                     <i class="fa-regular fa-trash-can"></i>
+                                 </a>
+                             </td>
+                        </tr>   
+                    }
                 }
             </tbody>
         </table>
     }
 
     <hr/>
-<a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary"> Обновить список</a>
+<a asp-action="RefreshCart" class="btn btn-outline-secondary"> Обновить список</a>
 
 </div>
