@@ -8,5 +8,7 @@ public interface IBooksService
 
     Task<Book?> GetByIdAsync(int id, CancellationToken Cancel = default);
 
+    Task<Book> UpdateAsync(Book book, CancellationToken cancel = default);
+
     Task<bool> DeleteAsync(int id, CancellationToken Cancel = default);
 }

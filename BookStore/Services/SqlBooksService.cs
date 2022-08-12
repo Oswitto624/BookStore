@@ -49,4 +49,14 @@ public class SqlBooksService : IBooksService
         return true;
     }
 
+    public async Task<Book> UpdateAsync(Book book, CancellationToken cancel = default)
+    {
+        if(book == null) throw new ArgumentNullException(nameof(book));
+
+        _db.Update(book);
+
+        await _db.SaveChangesAsync(cancel).ConfigureAwait(false);
+
+        return book;
+    }
 }
