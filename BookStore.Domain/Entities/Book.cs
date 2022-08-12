@@ -17,5 +17,8 @@ public class Book : NamedEntity
     [Required]
     public int PublicationDate { get; set; }
 
+    [Required]
+    public bool AddedToCart { get; set; } = false;
+
     public override string ToString() => $"[{Id}] {Name}, {Author.Name}, {PublicationDate} ";
 }
